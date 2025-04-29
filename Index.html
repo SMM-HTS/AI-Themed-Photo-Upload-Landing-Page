@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI MagicPics | Transform Your Photos</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+        
+        :root {
+            --primary: #6e48aa;
+            --secondary: #9d50bb;
+            --accent: #4776E6;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gradient: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: var(--dark);
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradientShift 8s ease infinite;
+            background-size: 400% 400%;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            color: #9d50bb;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: var(--gradient);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .hero {
+            padding: 180px 0 100px;
+            text-align: center;
+            background: url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            position: relative;
+            color: white;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(30, 30, 60, 0.8);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+            animation: gradientShift 8s ease infinite;
+            background-size: 400% 400%;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            animation: gradientShift 8s ease infinite;
+            background-size: 400% 400%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .features {
+            padding: 80px 0;
+            background: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            font-size: 36px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 4px;
+            bottom: -10px;
+            left: 20%;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradientShift 8s ease infinite;
+            background-size: 400% 400%;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+        
+        .gallery {
+            padding: 80px 0;
+            background: #f5f7ff;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 50px;
+        }
+        
+        .gallery-item {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            position: relative;
+            height: 250px;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-item:hover::after {
+            opacity: 1;
+        }
+        
+        .gallery-item p {
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            color: white;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-item:hover p {
+            bottom: 0;
+        }
+        
+        .form-section {
+            padding: 80px 0;
+            background: var(--dark);
+            color: white;
+        }
+        
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+        
+        .form-container h2 {
+            color: var(--dark);
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 28px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(110, 72, 170, 0.2);
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .file-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .file-upload:hover {
+            border-color: var(--primary);
+            background: rgba(110, 72, 170, 0.05);
+        }
+        
+        .file-upload i {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .file-upload p {
+            color: var(--dark);
+            text-align: center;
+        }
+        
+        .file-upload input {
+            display: none;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+        }
+        
+        footer {
+            background: #1a1a2e;
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .social-links a {
+            color: white;
+            font-size: 24px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            color: var(--secondary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            margin-top: 20px;
+            color: #aaa;
+        }
+        
+        .floating-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            z-index: 99;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite, gradientShift 8s ease infinite;
+            background-size: 400% 400%;
+        }
+        
+        .floating-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(157, 80, 187, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(157, 80, 187, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(157, 80, 187, 0); }
+        }
+        
+        .success-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 999;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .success-message i {
+            font-size: 60px;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        
+        .success-message h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .success-message p {
+            margin-bottom: 20px;
+            color: #555;
+        }
+        
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 998;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .nav-links {
+                gap: 15px;
+            }
+            
+            .section-title {
+                font-size: 30px;
+            }
+            
+            .form-container {
+                padding: 30px 20px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            h1 {
+                font-size: 30px;
+            }
+            
+            .hero {
+                padding: 150px 0 80px;
+            }
+            
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .section-title {
+                font-size: 26px;
+            }
+            
+            .feature-card {
+                padding: 20px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">AI MagicPics</div>
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#gallery">Gallery</a>
+                    <a href="#transform">Transform</a>
+                    <a href="#contact">Contact</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Transform Your Photos with AI Magic</h1>
+            <p>Upload your pictures and let our advanced AI create stunning, unique artwork in seconds. Perfect for social media, presentations, or personal enjoyment.</p>
+            <a href="#transform" class="btn">Try It Now</a>
+        </div>
+    </section>
+    
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Why Choose AI MagicPics</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Lightning Fast</h3>
+                    <p>Get your transformed images in seconds with our powerful AI algorithms working around the clock.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3>Creative Styles</h3>
+                    <p>Choose from dozens of artistic styles to apply to your photos, from classic paintings to futuristic designs.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Mobile Optimized</h3>
+                    <p>Upload and transform your photos directly from your smartphone with our mobile-friendly interface.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="gallery" id="gallery">
+        <div class="container">
+            <h2 class="section-title">AI-Generated Masterpieces</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="AI Art 1">
+                    <p>"Dreamy Landscape" - Oil painting style</p>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1634117622594-8c3d6b1c7f3a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="AI Art 2">
+                    <p>"Cyberpunk Portrait" - Neon futuristic style</p>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1635070041058-8d9f8b1b1b1a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="AI Art 3">
+                    <p>"Abstract Fusion" - Modern art style</p>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="AI Art 4">
+                    <p>"Watercolor Dreams" - Classic watercolor</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="form-section" id="transform">
+        <div class="container">
+            <div class="form-container">
+                <h2>Transform Your Photo</h2>
+                <form id="transformForm">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="style">Art Style</label>
+                        <select id="style" name="style" required>
+                            <option value="">Select a style</option>
+                            <option value="oil-painting">Oil Painting</option>
+                            <option value="watercolor">Watercolor</option>
+                            <option value="pencil-sketch">Pencil Sketch</option>
+                            <option value="cyberpunk">Cyberpunk</option>
+                            <option value="abstract">Abstract</option>
+                            <option value="surreal">Surreal</option>
+                            <option value="pop-art">Pop Art</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Photo Description</label>
+                        <textarea id="description" name="description" placeholder="Describe any specific changes or effects you'd like" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Upload Your Photo</label>
+                        <div class="file-upload" id="fileUpload">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to browse or drag & drop</p>
+                            <p class="small">JPG, PNG (Max 5MB)</p>
+                            <input type="file" id="photo" name="photo" accept="image/*" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn submit-btn">Generate AI Art</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo">AI MagicPics</div>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <div class="floating-btn" id="floatingBtn">
+        <i class="fas fa-magic"></i>
+    </div>
+    
+    <div class="overlay" id="overlay"></div>
+    
+    <div class="success-message" id="successMessage">
+        <i class="fas fa-check-circle"></i>
+        <h3>Thank You!</h3>
+        <p>Your photo has been submitted successfully. We'll process it and send the AI-generated version to your email within 24 hours.</p>
+        <button class="btn" id="closeSuccess">Awesome!</button>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileUpload = document.getElementById('fileUpload');
+            const fileInput = document.querySelector('#fileUpload input');
+            const transformForm = document.getElementById('transformForm');
+            const successMessage = document.getElementById('successMessage');
+            const overlay = document.getElementById('overlay');
+            const closeSuccess = document.getElementById('closeSuccess');
+            const floatingBtn = document.getElementById('floatingBtn');
+            
+            fileUpload.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            fileInput.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    const fileName = e.target.files[0].name;
+                    fileUpload.querySelector('p').textContent = fileName;
+                    fileUpload.style.borderColor = '#6e48aa';
+                }
+            });
+            
+            fileUpload.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                fileUpload.style.borderColor = '#6e48aa';
+                fileUpload.style.backgroundColor = 'rgba(110, 72, 170, 0.1)';
+            });
+            
+            fileUpload.addEventListener('dragleave', function() {
+                fileUpload.style.borderColor = '#ddd';
+                fileUpload.style.backgroundColor = 'transparent';
+            });
+            
+            fileUpload.addEventListener('drop', function(e) {
+                e.preventDefault();
+                fileUpload.style.borderColor = '#6e48aa';
+                fileUpload.style.backgroundColor = 'transparent';
+                if (e.dataTransfer.files.length > 0) {
+                    fileInput.files = e.dataTransfer.files;
+                    const fileName = e.dataTransfer.files[0].name;
+                    fileUpload.querySelector('p').textContent = fileName;
+                }
+            });
+            
+            transformForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                overlay.style.display = 'block';
+                successMessage.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                
+                setTimeout(() => {
+                    transformForm.reset();
+                    fileUpload.querySelector('p').textContent = 'Click to browse or drag & drop';
+                    fileUpload.style.borderColor = '#ddd';
+                }, 1000);
+            });
+            
+            closeSuccess.addEventListener('click', function() {
+                overlay.style.display = 'none';
+                successMessage.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            overlay.addEventListener('click', function() {
+                overlay.style.display = 'none';
+                successMessage.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            floatingBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    floatingBtn.style.display = 'flex';
+                } else {
+                    floatingBtn.style.display = 'none';
+                }
+            });
+            
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
